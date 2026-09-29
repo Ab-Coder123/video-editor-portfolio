@@ -14,11 +14,28 @@ import { Project } from './types';
 export function App() {
   const [loading, setLoading] = useState<boolean>(true);
   const [activeTab, setActiveTab] = useState<'projects' | 'about' | 'contact'>('projects');
+  const [pendingTab, setPendingTab] = useState<'projects' | 'about' | 'contact' | null>(null);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isDark, setIsDark] = useState<boolean>(() => {
     return localStorage.getItem('theme') === 'dark' || 
       (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches);
   });
+
+  // Handle Tab Switch with Video Editing Loading Transition
+  const handleTabChange = (newTab: 'projects' | 'about' | 'contact') => {
+    if (newTab === activeTab) return;
+    setPendingTab(newTab);
+    setLoading(true);
+  };
+
+  const getPageTitle = (tab: 'projects' | 'about' | 'contact' | null) => {
+    switch (tab) {
+      case 'projects': return 'معرض المشاريع والأعمال';
+      case 'about': return 'عن المصمم وقصتي';
+      case 'contact': return 'صفحة التواصل والطلب';
+      default: return 'كريم أحمد عبد العزيز';
+    }
+  };
 
   // Smooth Inertial Scroll (iPhone-like momentum physics)
   useEffect(() => {
@@ -61,10 +78,20 @@ export function App() {
 
   return (
     <>
-      {/* Video Editing Themed Initial Loading Screen */}
+      {/* Video Editing Themed Loading Screen (Initial & Page Switch) */}
       <AnimatePresence>
         {loading && (
-          <VideoLoader onComplete={() => setLoading(false)} />
+          <VideoLoader 
+            pageName={getPageTitle(pendingTab || activeTab)}
+            onComplete={() => {
+              if (pendingTab) {
+                setActiveTab(pendingTab);
+                setPendingTab(null);
+              }
+              setLoading(false);
+              window.scrollTo({ top: 0, behavior: 'instant' });
+            }} 
+          />
         )}
       </AnimatePresence>
 
@@ -73,15 +100,15 @@ export function App() {
         {/* Sticky Top Navbar */}
         <Navbar 
           activeTab={activeTab} 
-          setActiveTab={setActiveTab} 
+          setActiveTab={handleTabChange} 
           isDark={isDark} 
           toggleTheme={toggleTheme} 
         />
 
         {/* Hero Header Section */}
         <Hero
-          onExploreProjects={() => setActiveTab('projects')}
-          onContactClick={() => setActiveTab('contact')}
+          onExploreProjects={() => handleTabChange('projects')}
+          onContactClick={() => handleTabChange('contact')}
         />
 
         {/* Main Content View Switcher */}
@@ -106,7 +133,7 @@ export function App() {
         />
 
         {/* Footer */}
-        <Footer setActiveTab={setActiveTab} />
+        <Footer setActiveTab={handleTabChange} />
 
       </div>
     </>
