@@ -1,0 +1,56 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    font-family: 'Cairo', sans-serif !important;
+  }
+}
+
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+.font-italic-serif {
+  font-family: 'Cairo', sans-serif !important;
+  font-style: normal;
+}
+
+/* iOS-style momentum scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(147, 197, 253, 0.5);
+  border-radius: 9999px;
+  backdrop-filter: blur(4px);
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: rgba(59, 130, 246, 0.4);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #2563eb;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #3b82f6;
+}
