@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import Lenis from 'lenis';
+import { AnimatePresence } from 'framer-motion';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
 import { ProjectsPage } from './components/ProjectsPage';
 import { AboutPage } from './components/AboutPage';
 import { ContactPage } from './components/ContactPage';
 import { VideoModal } from './components/VideoModal';
+import { VideoLoader } from './components/VideoLoader';
 import { Footer } from './components/Footer';
 import { Project } from './types';
 
 export function App() {
+  const [loading, setLoading] = useState<boolean>(true);
   const [activeTab, setActiveTab] = useState<'projects' | 'about' | 'contact'>('projects');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isDark, setIsDark] = useState<boolean>(() => {
@@ -57,47 +60,56 @@ export function App() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slateText-main dark:text-slate-300 flex flex-col font-sans selection:bg-brand-600 selection:text-white transition-colors duration-300 overflow-x-hidden">
-      
-      {/* Sticky Top Navbar */}
-      <Navbar 
-        activeTab={activeTab} 
-        setActiveTab={setActiveTab} 
-        isDark={isDark} 
-        toggleTheme={toggleTheme} 
-      />
-
-      {/* Hero Header Section */}
-      <Hero
-        onExploreProjects={() => setActiveTab('projects')}
-        onContactClick={() => setActiveTab('contact')}
-      />
-
-      {/* Main Content View Switcher */}
-      <main className="flex-1">
-        {activeTab === 'projects' && (
-          <ProjectsPage onSelectProject={(p) => setSelectedProject(p)} />
+    <>
+      {/* Video Editing Themed Initial Loading Screen */}
+      <AnimatePresence>
+        {loading && (
+          <VideoLoader onComplete={() => setLoading(false)} />
         )}
+      </AnimatePresence>
 
-        {activeTab === 'about' && (
-          <AboutPage />
-        )}
+      <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slateText-main dark:text-slate-300 flex flex-col font-sans selection:bg-brand-600 selection:text-white transition-colors duration-300 overflow-x-hidden pb-20 md:pb-0">
+        
+        {/* Sticky Top Navbar */}
+        <Navbar 
+          activeTab={activeTab} 
+          setActiveTab={setActiveTab} 
+          isDark={isDark} 
+          toggleTheme={toggleTheme} 
+        />
 
-        {activeTab === 'contact' && (
-          <ContactPage />
-        )}
-      </main>
+        {/* Hero Header Section */}
+        <Hero
+          onExploreProjects={() => setActiveTab('projects')}
+          onContactClick={() => setActiveTab('contact')}
+        />
 
-      {/* Video Modal Player */}
-      <VideoModal
-        project={selectedProject}
-        onClose={() => setSelectedProject(null)}
-      />
+        {/* Main Content View Switcher */}
+        <main className="flex-1">
+          {activeTab === 'projects' && (
+            <ProjectsPage onSelectProject={(p) => setSelectedProject(p)} />
+          )}
 
-      {/* Footer */}
-      <Footer setActiveTab={setActiveTab} />
+          {activeTab === 'about' && (
+            <AboutPage />
+          )}
 
-    </div>
+          {activeTab === 'contact' && (
+            <ContactPage />
+          )}
+        </main>
+
+        {/* Video Modal Player */}
+        <VideoModal
+          project={selectedProject}
+          onClose={() => setSelectedProject(null)}
+        />
+
+        {/* Footer */}
+        <Footer setActiveTab={setActiveTab} />
+
+      </div>
+    </>
   );
 }
 
