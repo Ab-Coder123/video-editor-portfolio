@@ -9,6 +9,7 @@ import { ContactPage } from './components/ContactPage';
 import { VideoModal } from './components/VideoModal';
 import { VideoLoader } from './components/VideoLoader';
 import { Footer } from './components/Footer';
+import { FoodGallery } from './components/FoodGallery';
 import { Project } from './types';
 
 export function App() {

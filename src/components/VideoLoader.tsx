@@ -21,9 +21,9 @@ export const VideoLoader: React.FC<VideoLoaderProps> = ({ onComplete, pageName }
     ];
 
     let currentProgress = 0;
-    // Faster, smoother transition when switching pages (approx 600ms total)
+    // Exactly 3 seconds loading duration (100 steps * 30ms = 3000ms)
     const interval = setInterval(() => {
-      currentProgress += 25;
+      currentProgress += 1;
       if (currentProgress >= 100) {
         currentProgress = 100;
         setProgress(100);
@@ -31,7 +31,7 @@ export const VideoLoader: React.FC<VideoLoaderProps> = ({ onComplete, pageName }
         clearInterval(interval);
         setTimeout(() => {
           if (onComplete) onComplete();
-        }, 250);
+        }, 200);
       } else {
         setProgress(currentProgress);
         const idx = Math.min(Math.floor((currentProgress / 100) * statuses.length), statuses.length - 1);
@@ -41,7 +41,7 @@ export const VideoLoader: React.FC<VideoLoaderProps> = ({ onComplete, pageName }
         const secs = String(Math.floor((currentProgress / 100) * 59)).padStart(2, '0');
         setTimecode(`01:00:${secs}:${frames}`);
       }
-    }, 70);
+    }, 28);
 
     return () => clearInterval(interval);
   }, [onComplete, pageName]);

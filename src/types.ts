@@ -10,12 +10,13 @@ export interface Project {
   year: string;
   thumbnail: string;
   videoUrl: string;
-  embedType: 'youtube' | 'behance';
+  embedType: 'youtube' | 'behance' | 'photos';
   isVertical?: boolean;
   isFeatured?: boolean;
   description: string;
   tools: string[];
   isAI?: boolean;
+  photos?: string[];
 }
 
 export interface SoftwareTool {

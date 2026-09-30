@@ -10,9 +10,9 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab }) => {
   return (
     <footer className="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-12 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-        
+
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-          
+
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center">
               <Video className="w-5 h-5" />
@@ -34,9 +34,12 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab }) => {
         <div className="pt-6 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slateText-light dark:text-slate-400">
           <p>© {new Date().getFullYear()} {EDITOR_INFO.name}. جميع الحقوق محفوظة.</p>
           <div className="flex items-center gap-1">
-            <span>تصميم ومونتاج بكل</span>
             <Heart className="w-3.5 h-3.5 text-rose-500 fill-current" />
-            <span>بواسطة الذكاء الاصطناعي</span>
+            <span>Abdulrahman A.A  </span>
+            <a href="https://developer-portfolio-sigma-pink.vercel.app/" className='text-brand-600 dark:text-brand-400 hover:text-brand-800 dark:hover:text-brand-600'>
+              Portfolio
+            </a >
+            <span>: Is Created By</span>
           </div>
         </div>
 
