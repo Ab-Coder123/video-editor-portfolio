@@ -9,7 +9,6 @@ import { ContactPage } from './components/ContactPage';
 import { VideoModal } from './components/VideoModal';
 import { VideoLoader } from './components/VideoLoader';
 import { Footer } from './components/Footer';
-import { AdminDashboard } from './components/AdminDashboard';
 import { Project } from './types';
 import { useProjects } from './hooks/useProjects';
 
@@ -18,9 +17,6 @@ export function App() {
   const [activeTab, setActiveTab] = useState<'projects' | 'about' | 'contact'>('projects');
   const [pendingTab, setPendingTab] = useState<'projects' | 'about' | 'contact' | null>(null);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [isAdminView, setIsAdminView] = useState<boolean>(() => {
-    return window.location.hash === '#admin' || window.location.hash === '#dashboard';
-  });
 
   const [isDark, setIsDark] = useState<boolean>(() => {
     return localStorage.getItem('theme') === 'dark' || 
@@ -28,24 +24,7 @@ export function App() {
   });
 
   // Dynamic projects management from Firebase / LocalStorage
-  const {
-    projects,
-    addProject,
-    updateProject,
-    deleteProject,
-    seedDefaults
-  } = useProjects();
-
-  // Listen for hash changes (e.g. typing #admin in URL)
-  useEffect(() => {
-    const handleHashChange = () => {
-      const isHashAdmin = window.location.hash === '#admin' || window.location.hash === '#dashboard';
-      setIsAdminView(isHashAdmin);
-    };
-
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
-  }, []);
+  const { projects } = useProjects();
 
   // Handle Tab Switch with Video Editing Loading Transition
   const handleTabChange = (newTab: 'projects' | 'about' | 'contact') => {
@@ -65,8 +44,6 @@ export function App() {
 
   // Smooth Inertial Scroll (iPhone-like momentum physics)
   useEffect(() => {
-    if (isAdminView) return; // disable Lenis in admin dashboard to preserve native modal scrolling
-
     const lenis = new Lenis({
       duration: 1.2,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -86,7 +63,7 @@ export function App() {
       cancelAnimationFrame(rafId);
       lenis.destroy();
     };
-  }, [isAdminView]);
+  }, []);
 
   // Dark Mode toggle
   useEffect(() => {
@@ -103,39 +80,6 @@ export function App() {
   const toggleTheme = () => {
     setIsDark(prev => !prev);
   };
-
-  const handleOpenAdmin = () => {
-    window.location.hash = '#admin';
-    setIsAdminView(true);
-    window.scrollTo({ top: 0, behavior: 'instant' });
-  };
-
-  const handleExitAdmin = () => {
-    window.location.hash = '';
-    setIsAdminView(false);
-    window.scrollTo({ top: 0, behavior: 'instant' });
-  };
-
-  // If Admin View is active, render the studio dashboard
-  if (isAdminView) {
-    return (
-      <>
-        <AdminDashboard
-          projects={projects}
-          onAddProject={addProject}
-          onUpdateProject={updateProject}
-          onDeleteProject={deleteProject}
-          onSeedDefaults={seedDefaults}
-          onExit={handleExitAdmin}
-          onPreviewProject={(p) => setSelectedProject(p)}
-        />
-        <VideoModal
-          project={selectedProject}
-          onClose={() => setSelectedProject(null)}
-        />
-      </>
-    );
-  }
 
   return (
     <>
@@ -196,10 +140,9 @@ export function App() {
           onClose={() => setSelectedProject(null)}
         />
 
-        {/* Footer with Discreet Admin Link */}
+        {/* Clean Footer */}
         <Footer 
           setActiveTab={handleTabChange} 
-          onOpenAdmin={handleOpenAdmin}
         />
 
       </div>

@@ -1,13 +1,12 @@
 import React from 'react';
-import { Video, Heart, Lock } from 'lucide-react';
+import { Video, Heart } from 'lucide-react';
 import { EDITOR_INFO } from '../data/portfolioData';
 
 interface FooterProps {
   setActiveTab: (tab: 'projects' | 'about' | 'contact') => void;
-  onOpenAdmin?: () => void;
 }
 
-export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenAdmin }) => {
+export const Footer: React.FC<FooterProps> = ({ setActiveTab }) => {
   return (
     <footer className="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-12 transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
@@ -33,25 +32,13 @@ export const Footer: React.FC<FooterProps> = ({ setActiveTab, onOpenAdmin }) => 
         </div>
 
         <div className="pt-6 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slateText-light dark:text-slate-400">
-          <div className="flex items-center gap-4">
-            <p>© {new Date().getFullYear()} {EDITOR_INFO.name}. جميع الحقوق محفوظة.</p>
-            {onOpenAdmin && (
-              <button
-                onClick={onOpenAdmin}
-                className="text-slate-400 hover:text-brand-500 transition-colors flex items-center gap-1 font-medium"
-                title="لوحة تحكم إدارة الفيديوهات"
-              >
-                <Lock className="w-3 h-3" />
-                <span>لوحة التحكم (Admin)</span>
-              </button>
-            )}
-          </div>
+          <p>© {new Date().getFullYear()} {EDITOR_INFO.name}. جميع الحقوق محفوظة.</p>
           <div className="flex items-center gap-1">
             <Heart className="w-3.5 h-3.5 text-rose-500 fill-current" />
             <span>Abdulrahman A.A  </span>
             <a href="https://developer-portfolio-sigma-pink.vercel.app/" className='text-brand-600 dark:text-brand-400 hover:text-brand-800 dark:hover:text-brand-600'>
               Portfolio
-            </a >
+            </a>
             <span>: Is Created By</span>
           </div>
         </div>
