@@ -6,9 +6,10 @@ import { Project, CategoryType } from '../types';
 
 interface ProjectsPageProps {
   onSelectProject: (project: Project) => void;
+  projects?: Project[];
 }
 
-export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onSelectProject }) => {
+export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onSelectProject, projects = PROJECTS }) => {
   const [selectedCategory, setSelectedCategory] = useState<CategoryType>('all');
 
   const categories = [
@@ -20,9 +21,10 @@ export const ProjectsPage: React.FC<ProjectsPageProps> = ({ onSelectProject }) =
     { id: 'ai', label: '🤖 شغل AI' },
   ];
 
+  const sourceProjects = projects && projects.length > 0 ? projects : PROJECTS;
   const filteredProjects = selectedCategory === 'all'
-    ? PROJECTS
-    : PROJECTS.filter(p => p.category === selectedCategory);
+    ? sourceProjects
+    : sourceProjects.filter(p => p.category === selectedCategory);
 
   return (
     <section className="py-12 lg:py-20 bg-slate-50 dark:bg-slate-950 min-h-screen transition-colors duration-300">
